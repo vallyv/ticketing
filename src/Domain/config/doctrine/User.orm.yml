@@ -1,0 +1,22 @@
+Domain\User\Model\User:
+  type: entity
+  table: user
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    username:
+      type: string
+      length: 25
+    password:
+      type: string
+      length: 64
+    email:
+      type: string
+      length: 255
+    roles:
+      type: json_array
+    isActive:
+      type: integer
+      length: 1

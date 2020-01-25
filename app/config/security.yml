@@ -1,24 +1,22 @@
-# To get started with security, check out the documentation:
-# https://symfony.com/doc/current/security.html
 security:
-
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
-
+        user_provider:
+            entity:
+                class:  Domain\User\Model\User
+                property: username
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        Domain\User\Model\User: plaintext
+        
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
+            http_basic: ~
+            provider: user_provider
             #form_login: ~
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }

@@ -57,6 +57,12 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        mappings:
+            User:
+                is_bundle: false
+                type: yml
+                dir: "%kernel.project_dir%/src/Domain/config/doctrine"
+                prefix: Domain\User\Model
 
 # Swiftmailer Configuration
 swiftmailer:
