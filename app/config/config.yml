@@ -35,6 +35,7 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    exception_controller: AppBundle:Exception:show
 
 # Doctrine Configuration
 doctrine:
@@ -56,13 +57,17 @@ doctrine:
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
         mappings:
             User:
                 is_bundle: false
                 type: yml
-                dir: "%kernel.project_dir%/src/Domain/config/doctrine"
+                dir: "%kernel.project_dir%/src/Domain/config/doctrine/user"
                 prefix: Domain\User\Model
+            Model:
+                is_bundle: false
+                type: yml
+                dir: "%kernel.project_dir%/src/Domain/config/doctrine/model"
+                prefix: Domain\Model
 
 # Swiftmailer Configuration
 swiftmailer:

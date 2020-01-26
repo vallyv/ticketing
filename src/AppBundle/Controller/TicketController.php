@@ -2,7 +2,7 @@
 namespace AppBundle\Controller;
 
 use Domain\DTO\TicketDto;
-use Domain\User\Model\Ticket;
+use Domain\Model\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,9 +15,14 @@ class TicketController extends Controller
      */
     public function openNewAction(Request $request)
     {
-        //$ticket= Ticket::OpenTicket($user, TicketDto::fromArray($request->request->all());
+        $username= $this->get('security.token_storage')->getToken()->getUser();
+        $userRepo = $this->get('Domain.User.Repository');
 
-        return new JsonResponse($request->request->all());
+        $loggedUser = $userRepo->loadUserByUsername($username);
+
+        $ticket = Ticket::OpenTicket($loggedUser, TicketDto::fromArray($request->request->all()));
+
+        return new JsonResponse($ticket->serialize());
     }
 }
 

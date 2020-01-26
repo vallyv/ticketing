@@ -4,10 +4,12 @@ parameters:
     #parameter_name: value
 
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+    Domain.User.Repository:
+        class: Domain\User\Repository\UserRepository
+        factory:
+            - "@doctrine.orm.entity_manager"
+            - getRepository
+        arguments: [Domain\User\Model\User]
 
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures/*'

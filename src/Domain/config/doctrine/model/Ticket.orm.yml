@@ -1,0 +1,16 @@
+Domain\Model\Ticket:
+  type: entity
+  table: ticket
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    messages:
+      type: json_array
+  manyToOne:
+    user:
+      targetEntity: Domain\User\Model\User
+      joinColumn:
+        name: user_id
+        referencedName: id
