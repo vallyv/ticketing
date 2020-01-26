@@ -4,7 +4,7 @@ use AppBundle\Tests\BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class ReadTicketControllerTest extends BaseWebTestCase
+class CloseTicketControllerTest extends BaseWebTestCase
 {
     protected $client = null;
 
@@ -17,7 +17,7 @@ class ReadTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/100');
+        $this->client->request('GET', '/ticket/close/100');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
@@ -26,7 +26,7 @@ class ReadTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/2');
+        $this->client->request('GET', '/ticket/close/2');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
@@ -35,11 +35,11 @@ class ReadTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/1');
+        $this->client->request('GET', '/ticket/close/1');
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"open"}', $response);
+        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close"}', $response);
     }
 
     private function login($username)

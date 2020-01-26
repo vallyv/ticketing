@@ -47,6 +47,11 @@ class Ticket
         $this->updated_at = $date;
     }
 
+    public function close ()
+    {
+        $this->status = self::STATUS_CLOSE;
+        $this->updated_at = new \DateTime('now');
+    }
     public function serialize()
     {
         return [
