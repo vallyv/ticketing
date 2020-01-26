@@ -23,6 +23,7 @@ class BaseWebTestCase extends WebTestCase
 
         $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 0');
         $conn->executeQuery('TRUNCATE TABLE user');
+        $conn->executeQuery('TRUNCATE TABLE ticket');
         $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 1');
 
 

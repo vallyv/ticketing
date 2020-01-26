@@ -1,14 +1,10 @@
 <?php
-namespace Tests\features;
 
 use AppBundle\Tests\BaseWebTestCase;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class TicketControllerTest extends BaseWebTestCase
+class OpenTicketControllerTest extends BaseWebTestCase
 {
     protected $client = null;
 
@@ -37,7 +33,7 @@ class TicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"admin","message":"ciao"}', $response);
+        $this->assertEquals('{"user":"admin","message":["ciao"]}', $response);
     }
 
     public function testUserCanOpenTicketPost()
@@ -50,7 +46,7 @@ class TicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"username1","message":"ciao"}', $response);
+        $this->assertEquals('{"user":"username1","message":["ciao"]}', $response);
     }
 
     private function login()

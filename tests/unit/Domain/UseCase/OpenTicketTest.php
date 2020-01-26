@@ -2,10 +2,12 @@
 
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
+use Domain\Repository\TicketRepository;
+use Domain\UseCase\OpenTicket;
 use Domain\User\Model\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TicketTest extends WebTestCase
+class OpenTicketTest extends WebTestCase
 {
     public function testUserCanCreateTicket()
     {
@@ -18,9 +20,13 @@ class TicketTest extends WebTestCase
         $user->isAdmin()->willReturn(false);
         $user->getUsername()->willReturn('utente');
 
+        $repo = $this->prophesize(TicketRepository::class);
+
         $dto = TicketDto::fromArray(["messaggio" => "ciao"]);
 
-        $ticket = Ticket::OpenTicket($user->reveal(), $dto);
+        $useCase = new OpenTicket($repo->reveal());
+
+        $ticket = $useCase->execute($user->reveal(), $dto);
 
         $this->assertInstanceOf(Ticket::class, $ticket);
         $this->assertEquals($expected, $ticket->serialize());

@@ -21,13 +21,23 @@ class Ticket
         $now = new \DateTime('now');
         $ticket = new self();
         $ticket->user = $user;
-        $ticket->messages  = $data->getMessage();
+        $ticket->messages[]  = $data->getMessage();
         $ticket->created_at = $now;
         $ticket->updated_at = $now;
 
         return $ticket;
     }
 
+    public function addMessage(string $message)
+    {
+        $this->messages[] = $message;
+    }
+
+    public function setUpdateTime(\DateTime $date)
+    {
+        $this->updated_at = $date;
+    }
+    
     public function serialize()
     {
         return [
