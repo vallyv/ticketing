@@ -12,6 +12,36 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TicketController extends Controller
 {
+
+    /**
+     * @Route("/ticket/{id}", methods={"GET"}, name="get_ticket")
+     */
+    public function getTicketAction(Request $request, int $id)
+    {
+        $username= $this->get('security.token_storage')->getToken()->getUser();
+        $userRepo = $this->get('domain.user.repository');
+
+        $loggedUser = $userRepo->loadUserByUsername($username);
+
+        if (!$loggedUser instanceof User){
+            $response = new JsonResponse();
+            $response->setStatusCode(401);
+            return $response;
+        }
+
+        $ticketRepo = $this->get('domain.ticket.repository');
+
+        $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+
+        if (!$ticket instanceof Ticket){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        return new JsonResponse($ticket->serialize());
+    }
+
     /**
      * @Route("/ticket", methods={"POST"}, name="open_ticket")
      */

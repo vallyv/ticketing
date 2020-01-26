@@ -37,7 +37,7 @@ class Ticket
     {
         $this->updated_at = $date;
     }
-    
+
     public function serialize()
     {
         return [
