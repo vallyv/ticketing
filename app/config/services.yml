@@ -4,12 +4,18 @@ parameters:
     #parameter_name: value
 
 services:
-    Domain.User.Repository:
+    domain.user.repository:
         class: Domain\User\Repository\UserRepository
         factory:
             - "@doctrine.orm.entity_manager"
             - getRepository
         arguments: [Domain\User\Model\User]
+    domain.ticket.repository:
+        class: Domain\User\Repository\TicketRepository
+        factory:
+            - "@doctrine.orm.entity_manager"
+            - getRepository
+        arguments: [Domain\Model\Ticket]
 
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures/*'

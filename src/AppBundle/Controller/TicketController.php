@@ -17,7 +17,7 @@ class TicketController extends Controller
     public function openNewAction(Request $request)
     {
         $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('Domain.User.Repository');
+        $userRepo = $this->get('domain.user.repository');
 
         $loggedUser = $userRepo->loadUserByUsername($username);
 
@@ -28,6 +28,9 @@ class TicketController extends Controller
         }
 
         $ticket = Ticket::OpenTicket($loggedUser, TicketDto::fromArray($request->request->all()));
+        $ticketRepo = $this->get('domain.ticket.repository');
+
+        $ticketRepo->save($ticket);
 
         return new JsonResponse($ticket->serialize());
     }

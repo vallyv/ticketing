@@ -1,4 +1,5 @@
 Domain\Model\Ticket:
+  repositoryClass: Domain\Repository\TicketRepository
   type: entity
   table: ticket
   id:
@@ -8,6 +9,11 @@ Domain\Model\Ticket:
   fields:
     messages:
       type: json_array
+    created_at:
+      type: datetime
+    updated_at:
+      type: datetime
+
   manyToOne:
     user:
       targetEntity: Domain\User\Model\User
