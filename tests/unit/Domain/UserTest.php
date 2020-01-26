@@ -1,5 +1,4 @@
 <?php
-namespace Tests\Domain;
 
 use Domain\User\Model\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
