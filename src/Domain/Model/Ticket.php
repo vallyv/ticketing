@@ -6,11 +6,19 @@ use Domain\User\Model\User;
 
 class Ticket
 {
+    const STATUS_OPEN = "open";
+
+    const STATUS_CLOSE = "close";
+
+    const STATUS_ASSIGNED = "assigned";
+
     private $id;
 
     private $user;
 
     private $messages;
+
+    private $status;
 
     private $created_at;
 
@@ -21,6 +29,7 @@ class Ticket
         $now = new \DateTime('now');
         $ticket = new self();
         $ticket->user = $user;
+        $ticket->status = self::STATUS_OPEN;
         $ticket->messages[]  = $data->getMessage();
         $ticket->created_at = $now;
         $ticket->updated_at = $now;
@@ -42,7 +51,8 @@ class Ticket
     {
         return [
             "user" => $this->user->getUsername(),
-            "message" => $this->messages
+            "message" => $this->messages,
+            "status" => $this->status
         ];
     }
 }

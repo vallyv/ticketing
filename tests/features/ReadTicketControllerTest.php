@@ -39,7 +39,7 @@ class ReadTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"]}', $response);
+        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"open"}', $response);
     }
 
     private function login($username)

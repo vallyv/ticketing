@@ -14,8 +14,9 @@ class AddMessageToTicketTest extends WebTestCase
     public function testUserCanAddMessageTicket()
     {
         $expected = [
-          "user" => "utente",
-          "message" => ["primo messaggio","secondo messaggio" ]
+            "user" => "utente",
+            "message" => ["primo messaggio","secondo messaggio" ],
+            "status" => "open"
         ];
 
         $user = $this->prophesize(User::class);

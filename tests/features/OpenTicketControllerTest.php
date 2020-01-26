@@ -33,7 +33,7 @@ class OpenTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"admin","message":["ciao"]}', $response);
+        $this->assertEquals('{"user":"admin","message":["ciao"],"status":"open"}', $response);
     }
 
     public function testUserCanOpenTicketPost()
@@ -46,7 +46,7 @@ class OpenTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"username1","message":["ciao"]}', $response);
+        $this->assertEquals('{"user":"username1","message":["ciao"],"status":"open"}', $response);
     }
 
     private function login()

@@ -9,6 +9,9 @@ Domain\Model\Ticket:
   fields:
     messages:
       type: json_array
+    status:
+      type: string
+      lenght: 30
     created_at:
       type: datetime
     updated_at:

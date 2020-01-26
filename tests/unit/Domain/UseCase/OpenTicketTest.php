@@ -12,8 +12,9 @@ class OpenTicketTest extends WebTestCase
     public function testUserCanCreateTicket()
     {
         $expected = [
-          "user" => "utente",
-          "message" => ["ciao"]
+            "user" => "utente",
+            "message" => ["ciao"],
+            "status" => "open"
         ];
 
         $user = $this->prophesize(User::class);
