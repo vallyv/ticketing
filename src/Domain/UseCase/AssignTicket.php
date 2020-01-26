@@ -5,7 +5,7 @@ use Domain\DTO\TicketDto;
 use Domain\Repository\TicketRepository;
 use Domain\User\Model\User;
 
-class AddMessageToTicket
+class AssignTicket
 {
     private $repository;
 
@@ -14,11 +14,15 @@ class AddMessageToTicket
         $this->repository = $repo;
     }
 
-    public function execute(int $id, User $user, TicketDto $data)
+    public function execute(int $id, User $user)
     {
-        $ticket = $this->repository->findByUserAndId($user, $id);
+        if (!$user->isAdmin()){
+            throw new \Exception('Non hai i permessi');
+        }
 
-        $ticket->addMessage($data->getMessage());
+        $ticket = $this->repository->findById($id);
+
+        $ticket->assign($user);
 
         $this->repository->save($ticket);
 

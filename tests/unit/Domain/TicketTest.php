@@ -12,7 +12,8 @@ class TicketTest extends WebTestCase
         $expected = [
             "user" => "utente",
             "message" => ["ciao"],
-            "status" => "open"
+            "status" => "open",
+            "assignedTo" => ""
         ];
 
         $user = $this->prophesize(User::class);

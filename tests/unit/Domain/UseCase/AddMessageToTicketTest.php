@@ -16,7 +16,8 @@ class AddMessageToTicketTest extends WebTestCase
         $expected = [
             "user" => "utente",
             "message" => ["primo messaggio","secondo messaggio" ],
-            "status" => "open"
+            "status" => "open",
+            'assignedTo' => ''
         ];
 
         $user = $this->prophesize(User::class);

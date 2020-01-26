@@ -16,6 +16,15 @@ class TicketRepository extends EntityRepository
         ]);
 
     }
+
+    public function findById(int $id)
+    {
+        return $this->findOneBy([
+            "id" => $id
+        ]);
+
+    }
+
     public function save(Ticket $ticket)
     {
         $this->_em->persist($ticket);

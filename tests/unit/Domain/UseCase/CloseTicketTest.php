@@ -16,7 +16,8 @@ class CloseTicketTest extends WebTestCase
         $expected = [
             "user" => "utente",
             "message" => ["primo messaggio"],
-            "status" => "close"
+            "status" => "close",
+            'assignedTo' => ''
         ];
 
         $user = $this->prophesize(User::class);

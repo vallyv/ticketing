@@ -39,7 +39,7 @@ class CloseTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close"}', $response);
+        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close","assignedTo":""}', $response);
     }
 
     private function login($username)

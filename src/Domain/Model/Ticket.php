@@ -16,6 +16,8 @@ class Ticket
 
     private $user;
 
+    private $assigned;
+
     private $messages;
 
     private $status;
@@ -47,17 +49,26 @@ class Ticket
         $this->updated_at = $date;
     }
 
-    public function close ()
+    public function close()
     {
         $this->status = self::STATUS_CLOSE;
         $this->updated_at = new \DateTime('now');
     }
+
+    public function assign(User $user)
+    {
+        $this->assigned = $user;
+        $this->status = self::STATUS_ASSIGNED;
+        $this->updated_at = new \DateTime('now');
+    }
+
     public function serialize()
     {
         return [
             "user" => $this->user->getUsername(),
             "message" => $this->messages,
-            "status" => $this->status
+            "status" => $this->status,
+            "assignedTo" => $this->assigned ? $this->assigned->getUsername() : ''
         ];
     }
 }

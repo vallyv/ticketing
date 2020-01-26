@@ -45,7 +45,7 @@ class AddMessagesTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio","secondo messaggio"],"status":"open"}', $response);
+        $this->assertEquals('{"user":"user","message":["primo messaggio","secondo messaggio"],"status":"open","assignedTo":""}', $response);
     }
 
     private function login($username)
