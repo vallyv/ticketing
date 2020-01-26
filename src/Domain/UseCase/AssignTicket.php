@@ -22,6 +22,10 @@ class AssignTicket
 
         $ticket = $this->repository->findById($id);
 
+        if ($ticket->isAssigned()){
+            throw new \Exception('Ticket gia assegnato');
+        }
+
         $ticket->assign($user);
 
         $this->repository->save($ticket);

@@ -4,7 +4,7 @@ use AppBundle\Tests\BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class CloseTicketControllerTest extends BaseWebTestCase
+class AssignTicketControllerTest extends BaseWebTestCase
 {
     protected $client = null;
 
@@ -13,33 +13,33 @@ class CloseTicketControllerTest extends BaseWebTestCase
         parent::setUp();
     }
 
-    public function testUserCantCloseNonExistentTicketGet()
+    public function testUserCantReadNonExistentTicketGet()
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/close/100');
+        $this->client->request('GET', '/ticket/assign/100');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCantCloseTicketFromAnotherUserGet()
+    public function testUserCantAssignTicketGet()
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/close/2');
+        $this->client->request('GET', '/ticket/assign/2');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCanCloseToTicketGet()
+    public function testAdminCanAssignTicketGet()
     {
-        $this->login("user");
+        $this->login("admin");
 
-        $this->client->request('GET', '/ticket/close/1');
+        $this->client->request('GET', '/ticket/assign/1');
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close","assignedTo":""}', $response);
+        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"assigned","assignedTo":"admin"}', $response);
     }
 
     private function login($username)

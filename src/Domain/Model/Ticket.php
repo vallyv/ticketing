@@ -62,6 +62,11 @@ class Ticket
         $this->updated_at = new \DateTime('now');
     }
 
+    public function isAssigned(): bool
+    {
+        return $this->status === self::STATUS_ASSIGNED;
+    }
+
     public function serialize()
     {
         return [

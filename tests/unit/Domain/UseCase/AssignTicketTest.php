@@ -29,7 +29,33 @@ class AssignTicketTest extends WebTestCase
 
         $useCase = new AssignTicket($repo->reveal());
 
-        $ticket = $useCase->execute(1, $user->reveal());
+        $useCase->execute(1, $user->reveal());
+    }
+
+    /** @expectedException Exception
+     * @expectedExceptionMessage Ticket gia assegnato
+     */
+    public function testTicketCantAsignedToAdminIfAlreadyAssigned()
+    {
+        $user = $this->prophesize(User::class);
+        $user->isAdmin()->willReturn(false);
+        $user->getUsername()->willReturn('utente');
+
+        $admin = $this->prophesize(User::class);
+        $admin->isAdmin()->willReturn(true);
+        $admin->getUsername()->willReturn('admin');
+
+        $dto = TicketDto::fromArray(["messaggio" => "primo messaggio"]);
+        $ticket = Ticket::OpenTicket($user->reveal(), $dto);
+
+        $repo = $this->prophesize(TicketRepository::class);
+        $repo->findById(1)->willReturn($ticket);
+        $repo->save(Argument::any())->shouldBeCalled();
+
+        $useCase = new AssignTicket($repo->reveal());
+
+        $useCase->execute(1, $admin->reveal());
+        $useCase->execute(1, $admin->reveal());
     }
 
     public function testTicketCanAsignedToAdmin()

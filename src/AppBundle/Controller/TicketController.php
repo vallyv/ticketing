@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
 use Domain\UseCase\AddMessageToTicket;
+use Domain\UseCase\AssignTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -79,6 +80,32 @@ class TicketController extends Controller
         }
 
         $useCase = new CloseTicket($ticketRepo);
+        $ticket = $useCase->execute($id, $loggedUser);
+
+        return new JsonResponse($ticket->serialize());
+    }
+
+    /**
+     * @Route("/ticket/assign/{id}", methods={"GET"}, name="assign_ticket")
+     */
+    public function assignTicketAction(Request $request, int $id)
+    {
+        $username= $this->get('security.token_storage')->getToken()->getUser();
+        $userRepo = $this->get('domain.user.repository');
+
+        $loggedUser = $userRepo->loadUserByUsername($username);
+
+        $ticketRepo = $this->get('domain.ticket.repository');
+
+        $ticket = $ticketRepo->findById($id);
+
+        if (!$ticket instanceof Ticket){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        $useCase = new AssignTicket($ticketRepo);
         $ticket = $useCase->execute($id, $loggedUser);
 
         return new JsonResponse($ticket->serialize());

@@ -31,7 +31,7 @@ class ReadTicketControllerTest extends BaseWebTestCase
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCanAddMessageToTicketGet()
+    public function testUserCanReadTicketGet()
     {
         $this->login("user");
 
