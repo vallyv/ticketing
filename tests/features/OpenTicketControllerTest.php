@@ -23,7 +23,6 @@ class TicketControllerTest extends BaseWebTestCase
         $data = ["messaggio" =>"ciao"];
 
         $this->client->request('POST', '/ticket', $data);
-        $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
