@@ -7,6 +7,7 @@ use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\AssignTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
+use Domain\User\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,14 +21,9 @@ class TicketController extends Controller
      */
     public function getTicketAction(Request $request, int $id)
     {
-        $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('domain.user.repository');
+        $loggedUser = $this->getLoggedUser();
 
-        $loggedUser = $userRepo->loadUserByUsername($username);
-
-        $ticketRepo = $this->get('domain.ticket.repository');
-
-        $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+        $ticket = $this->getTicket($id, $loggedUser);
 
         if (!$ticket instanceof Ticket){
             $response = new JsonResponse();
@@ -43,10 +39,7 @@ class TicketController extends Controller
      */
     public function openNewAction(Request $request)
     {
-        $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('domain.user.repository');
-
-        $loggedUser = $userRepo->loadUserByUsername($username);
+        $loggedUser = $this->getLoggedUser();
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
@@ -64,14 +57,9 @@ class TicketController extends Controller
      */
     public function closeTicketAction(Request $request, int $id)
     {
-        $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('domain.user.repository');
+        $loggedUser = $this->getLoggedUser();
 
-        $loggedUser = $userRepo->loadUserByUsername($username);
-
-        $ticketRepo = $this->get('domain.ticket.repository');
-
-        $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+        $ticket = $this->getTicket($id, $loggedUser);
 
         if (!$ticket instanceof Ticket){
             $response = new JsonResponse();
@@ -79,7 +67,7 @@ class TicketController extends Controller
             return $response;
         }
 
-        $useCase = new CloseTicket($ticketRepo);
+        $useCase = new CloseTicket($this->get('domain.ticket.repository'));
         $ticket = $useCase->execute($id, $loggedUser);
 
         return new JsonResponse($ticket->serialize());
@@ -90,10 +78,7 @@ class TicketController extends Controller
      */
     public function assignTicketAction(Request $request, int $id)
     {
-        $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('domain.user.repository');
-
-        $loggedUser = $userRepo->loadUserByUsername($username);
+        $loggedUser = $this->getLoggedUser();
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
@@ -116,14 +101,9 @@ class TicketController extends Controller
      */
     public function addMessageAction(Request $request, int $id)
     {
-        $username= $this->get('security.token_storage')->getToken()->getUser();
-        $userRepo = $this->get('domain.user.repository');
+        $loggedUser = $this->getLoggedUser();
 
-        $loggedUser = $userRepo->loadUserByUsername($username);
-
-        $ticketRepo = $this->get('domain.ticket.repository');
-
-        $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+        $ticket = $this->getTicket($id, $loggedUser);
 
         if (!$ticket instanceof Ticket){
             $response = new JsonResponse();
@@ -133,10 +113,33 @@ class TicketController extends Controller
 
         $data = TicketDto::fromArray($request->request->all());
 
-        $useCase = new AddMessageToTicket($ticketRepo);
+        $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'));
         $ticket = $useCase->execute($id,$loggedUser, $data);
 
         return new JsonResponse($ticket->serialize());
+    }
+
+    private function getLoggedUser(): User
+    {
+        $username = $this->get('security.token_storage')->getToken()->getUser();
+        $userRepo = $this->get('domain.user.repository');
+
+        $loggedUser = $userRepo->loadUserByUsername($username);
+
+        return $loggedUser;
+    }
+
+    /**
+     * @param int $id
+     * @param User $loggedUser
+     * @return mixed
+     */
+    private function getTicket(int $id, User $loggedUser)
+    {
+        $ticketRepo = $this->get('domain.ticket.repository');
+
+        $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+        return $ticket;
     }
 }
 
