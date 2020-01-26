@@ -18,9 +18,19 @@ class TicketControllerTest extends BaseWebTestCase
 
     }
 
-    public function testOpenTicketPost()
+    public function testUserNotLoggedOpenTicketPost()
     {
-        $this->login();
+        $data = ["messaggio" =>"ciao"];
+
+        $this->client->request('POST', '/ticket', $data);
+        $response = $this->client->getResponse()->getContent();
+
+        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testAdminOpenTicketPost()
+    {
+        $this->adminLogin();
 
         $data = ["messaggio" =>"ciao"];
 
@@ -31,7 +41,35 @@ class TicketControllerTest extends BaseWebTestCase
         $this->assertEquals('{"user":"admin","message":"ciao"}', $response);
     }
 
+    public function testUserCanOpenTicketPost()
+    {
+        $this->login();
+
+        $data = ["messaggio" =>"ciao"];
+
+        $this->client->request('POST', '/ticket', $data);
+        $response = $this->client->getResponse()->getContent();
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('{"user":"username1","message":"ciao"}', $response);
+    }
+
     private function login()
+    {
+        $session = $this->client->getContainer()->get('session');
+
+        $firewall = 'main';
+        $token = new UsernamePasswordToken('username1', 'admin', $firewall, array('ROLE_USER'));
+
+        $this->client->getContainer()->get('security.token_storage')->setToken($token);
+        $session->set('_security_' . $firewall, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $this->client->getCookieJar()->set($cookie);
+    }
+
+    private function adminLogin()
     {
         $session = $this->client->getContainer()->get('session');
 
