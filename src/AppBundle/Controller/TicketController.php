@@ -6,7 +6,6 @@ use Domain\Model\Ticket;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
-use Domain\User\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +23,6 @@ class TicketController extends Controller
         $userRepo = $this->get('domain.user.repository');
 
         $loggedUser = $userRepo->loadUserByUsername($username);
-
-        if (!$loggedUser instanceof User){
-            $response = new JsonResponse();
-            $response->setStatusCode(401);
-            return $response;
-        }
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
@@ -54,11 +47,6 @@ class TicketController extends Controller
 
         $loggedUser = $userRepo->loadUserByUsername($username);
 
-        if (!$loggedUser instanceof User){
-            $response = new JsonResponse();
-            $response->setStatusCode(401);
-            return $response;
-        }
         $ticketRepo = $this->get('domain.ticket.repository');
 
         $data = TicketDto::fromArray($request->request->all());
@@ -79,12 +67,6 @@ class TicketController extends Controller
         $userRepo = $this->get('domain.user.repository');
 
         $loggedUser = $userRepo->loadUserByUsername($username);
-
-        if (!$loggedUser instanceof User){
-            $response = new JsonResponse();
-            $response->setStatusCode(401);
-            return $response;
-        }
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
@@ -111,12 +93,6 @@ class TicketController extends Controller
         $userRepo = $this->get('domain.user.repository');
 
         $loggedUser = $userRepo->loadUserByUsername($username);
-
-        if (!$loggedUser instanceof User){
-            $response = new JsonResponse();
-            $response->setStatusCode(401);
-            return $response;
-        }
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
