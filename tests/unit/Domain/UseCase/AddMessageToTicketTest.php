@@ -28,7 +28,7 @@ class AddMessageToTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), TicketDto::fromArray(["messaggio" => "primo messaggio"]));
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findByUserAndId($user->reveal(), 1)->willReturn($ticket);
+        $repo->findNotCloseByUserAndId($user->reveal(), 1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
 
         $useCase = new AddMessageToTicket($repo->reveal());

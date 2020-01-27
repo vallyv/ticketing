@@ -59,16 +59,14 @@ class TicketController extends Controller
     {
         $loggedUser = $this->getLoggedUser();
 
-        $ticket = $this->getTicket($id, $loggedUser);
+        $useCase = new CloseTicket($this->get('domain.ticket.repository'));
+        $ticket = $useCase->execute($id, $loggedUser);
 
-        if (!$ticket instanceof Ticket){
+        if (!$ticket){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
         }
-
-        $useCase = new CloseTicket($this->get('domain.ticket.repository'));
-        $ticket = $useCase->execute($id, $loggedUser);
 
         return new JsonResponse($ticket->serialize());
     }
@@ -82,16 +80,15 @@ class TicketController extends Controller
 
         $ticketRepo = $this->get('domain.ticket.repository');
 
-        $ticket = $ticketRepo->findById($id);
+        $useCase = new AssignTicket($ticketRepo);
 
-        if (!$ticket instanceof Ticket){
+        try {
+            $ticket = $useCase->execute($id, $loggedUser);
+        } catch (\Exception $e){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
         }
-
-        $useCase = new AssignTicket($ticketRepo);
-        $ticket = $useCase->execute($id, $loggedUser);
 
         return new JsonResponse($ticket->serialize());
     }
@@ -103,18 +100,16 @@ class TicketController extends Controller
     {
         $loggedUser = $this->getLoggedUser();
 
-        $ticket = $this->getTicket($id, $loggedUser);
+        $data = TicketDto::fromArray($request->request->all());
+
+        $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'));
+        $ticket = $useCase->execute($id,$loggedUser, $data);
 
         if (!$ticket instanceof Ticket){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
         }
-
-        $data = TicketDto::fromArray($request->request->all());
-
-        $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'));
-        $ticket = $useCase->execute($id,$loggedUser, $data);
 
         return new JsonResponse($ticket->serialize());
     }
@@ -139,6 +134,7 @@ class TicketController extends Controller
         $ticketRepo = $this->get('domain.ticket.repository');
 
         $ticket = $ticketRepo->findByUserAndId($loggedUser, $id);
+
         return $ticket;
     }
 }

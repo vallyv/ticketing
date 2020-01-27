@@ -20,7 +20,11 @@ class AssignTicket
             throw new \Exception('Non hai i permessi');
         }
 
-        $ticket = $this->repository->findById($id);
+        $ticket = $this->repository->findOpenById($id);
+
+        if(is_null($ticket)){
+            throw new \Exception('Ticket inesistente');
+        }
 
         if ($ticket->isAssigned()){
             throw new \Exception('Ticket gia assegnato');

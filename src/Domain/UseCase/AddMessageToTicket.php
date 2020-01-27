@@ -16,7 +16,11 @@ class AddMessageToTicket
 
     public function execute(int $id, User $user, TicketDto $data)
     {
-        $ticket = $this->repository->findByUserAndId($user, $id);
+        $ticket = $this->repository->findNotCloseByUserAndId($user, $id);
+
+        if(is_null($ticket)){
+            return;
+        }
 
         $ticket->addMessage($data->getMessage());
 

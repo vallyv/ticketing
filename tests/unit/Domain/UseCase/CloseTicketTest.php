@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CloseTicketTest extends WebTestCase
 {
-    public function testUserCanCreateTicket()
+    public function testUserCanCloseTicket()
     {
         $expected = [
             "user" => "utente",
@@ -28,7 +28,7 @@ class CloseTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), $dto);
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findByUserAndId($user->reveal(), 1)->willReturn($ticket);
+        $repo->findNotCloseByUserAndId($user->reveal(), 1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
 
         $useCase = new CloseTicket($repo->reveal());

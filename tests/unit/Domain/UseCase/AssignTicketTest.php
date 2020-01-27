@@ -25,7 +25,7 @@ class AssignTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), $dto);
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findById(1)->willReturn($ticket);
+        $repo->findOpenById(1)->willReturn($ticket);
 
         $useCase = new AssignTicket($repo->reveal());
 
@@ -49,7 +49,7 @@ class AssignTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), $dto);
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findById(1)->willReturn($ticket);
+        $repo->findOpenById(1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
 
         $useCase = new AssignTicket($repo->reveal());
@@ -79,7 +79,7 @@ class AssignTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), $dto);
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findById(1)->willReturn($ticket);
+        $repo->findOpenById(1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
 
         $useCase = new AssignTicket($repo->reveal());
