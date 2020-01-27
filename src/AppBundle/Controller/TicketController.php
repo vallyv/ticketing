@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
 use Domain\UseCase\AddMessageToTicket;
+use Domain\UseCase\AdminAddMessageToTicket;
 use Domain\UseCase\AssignTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
@@ -103,6 +104,27 @@ class TicketController extends Controller
         $data = TicketDto::fromArray($request->request->all());
 
         $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'));
+        $ticket = $useCase->execute($id,$loggedUser, $data);
+
+        if (!$ticket instanceof Ticket){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        return new JsonResponse($ticket->serialize());
+    }
+
+    /**
+     * @Route("/admin/ticket/{id}", methods={"POST"}, name="admin_add_message")
+     */
+    public function adminAddMessageAction(Request $request, int $id)
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $data = TicketDto::fromArray($request->request->all());
+
+        $useCase = new AdminAddMessageToTicket($this->get('domain.ticket.repository'));
         $ticket = $useCase->execute($id,$loggedUser, $data);
 
         if (!$ticket instanceof Ticket){
