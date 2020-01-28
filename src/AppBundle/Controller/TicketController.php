@@ -6,6 +6,7 @@ use Domain\Model\Ticket;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\AdminAddMessageToTicket;
 use Domain\UseCase\AdminCloseTicket;
+use Domain\UseCase\AdminReassignTicket;
 use Domain\UseCase\AssignTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
@@ -165,6 +166,39 @@ class TicketController extends Controller
 
         return $loggedUser;
     }
+
+    /**
+     * @Route("/admin/ticket/reassign/{id}/{username}", methods={"GET"}, name="admin_reassign_ticket")
+     */
+    public function adminReassignTicketAction(Request $request, int $id, string  $username)
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $userRepo = $this->get('domain.user.repository');
+
+        $user = $userRepo->loadUserByUsername($username);
+
+        if(!$user){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        $ticketRepo = $this->get('domain.ticket.repository');
+
+        $useCase = new AdminReassignTicket($ticketRepo);
+
+        try {
+            $ticket = $useCase->execute($id, $loggedUser, $user);
+        } catch (\Exception $e){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        return new JsonResponse($ticket->serialize());
+    }
+
 
     /**
      * @param int $id

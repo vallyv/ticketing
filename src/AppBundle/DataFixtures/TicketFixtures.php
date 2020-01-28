@@ -14,6 +14,9 @@ class TicketFixtures extends Fixture
         $admin = User::create('admin', 'admin', 'emailadmin', 'admin');
         $manager->persist($admin);
 
+        $admin2 = User::create('admin2', 'admin', 'emailadmin', 'admin');
+        $manager->persist($admin2);
+
         $user = User::create('user', 'user', 'email');
         $manager->persist($user);
 
