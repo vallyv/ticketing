@@ -62,9 +62,19 @@ class Ticket
         $this->updated_at = new \DateTime('now');
     }
 
+    public function isOpen(): bool
+    {
+        return $this->status === self::STATUS_OPEN;
+    }
+
     public function isAssigned(): bool
     {
         return $this->status === self::STATUS_ASSIGNED;
+    }
+
+    public function isUsersTicket(User $user): bool
+    {
+        return $this->assigned === $user;
     }
 
     public function serialize()

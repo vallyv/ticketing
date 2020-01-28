@@ -33,7 +33,7 @@ class AdminAddMessageToTicketTest extends WebTestCase
         $ticket = Ticket::OpenTicket($user->reveal(), TicketDto::fromArray(["messaggio" => "primo messaggio"]));
 
         $repo = $this->prophesize(TicketRepository::class);
-        $repo->findOpenById(1)->willReturn($ticket);
+        $repo->findOneById(1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
 
         $useCase = new AdminAddMessageToTicket($repo->reveal());

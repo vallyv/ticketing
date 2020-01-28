@@ -16,9 +16,13 @@ class AdminAddMessageToTicket
 
     public function execute(int $id, User $admin, TicketDto $data)
     {
-        $ticket = $this->repository->findOpenById($id);
+        $ticket = $this->repository->findOneById($id);
 
         if(is_null($ticket)){
+            return;
+        }
+
+        if(!$ticket->isUsersTicket($admin) && !$ticket->isOpen()){
             return;
         }
 

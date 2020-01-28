@@ -11,6 +11,9 @@ class TicketFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        $admin = User::create('admin', 'admin', 'emailadmin', 'admin');
+        $manager->persist($admin);
+
         $user = User::create('user', 'user', 'email');
         $manager->persist($user);
 
@@ -19,6 +22,11 @@ class TicketFixtures extends Fixture
         ]);
 
         $ticket = Ticket::OpenTicket($user, $ticketDto);
+
+        $manager->persist($ticket);
+
+        $ticket = Ticket::OpenTicket($user, $ticketDto);
+        $ticket->assign($admin);
 
         $manager->persist($ticket);
 

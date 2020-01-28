@@ -26,7 +26,7 @@ class CloseTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/close/2');
+        $this->client->request('GET', '/ticket/close/3');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }

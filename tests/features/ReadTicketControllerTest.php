@@ -26,7 +26,7 @@ class ReadTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $this->client->request('GET', '/ticket/2');
+        $this->client->request('GET', '/ticket/3');
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }

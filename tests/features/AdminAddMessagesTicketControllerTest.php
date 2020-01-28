@@ -30,18 +30,31 @@ class AdminAddMessagesTicketControllerTest extends BaseWebTestCase
 
         $data = ["messaggio" =>"secondo messaggio"];
 
-        $this->client->request('POST', 'admin/ticket/2', $data);
+        $this->client->request('POST', 'admin/ticket/3', $data);
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCanAddMessageToTicketPost()
+    public function testAdminCanAddMessageToTicketPost()
     {
         $this->login();
 
         $data = ["messaggio" =>"secondo messaggio"];
 
         $this->client->request('POST', 'admin/ticket/1', $data);
+        $response = $this->client->getResponse()->getContent();
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('{"user":"user","message":["primo messaggio","secondo messaggio"],"status":"assigned","assignedTo":"admin"}', $response);
+    }
+
+    public function testUserCanAddMessageToAssignedTicketPost()
+    {
+        $this->login();
+
+        $data = ["messaggio" =>"secondo messaggio"];
+
+        $this->client->request('POST', 'admin/ticket/2', $data);
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());

@@ -30,6 +30,11 @@ class TicketRepository extends EntityRepository
         ]);
     }
 
+    public function findOneById(int $id)
+    {
+        return parent::findOneById($id);
+    }
+
     public function findOpenById(int $id)
     {
         return $this->findOneBy([

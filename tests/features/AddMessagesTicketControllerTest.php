@@ -30,7 +30,7 @@ class AddMessagesTicketControllerTest extends BaseWebTestCase
 
         $data = ["messaggio" =>"secondo messaggio"];
 
-        $this->client->request('POST', '/ticket/2', $data);
+        $this->client->request('POST', '/ticket/3', $data);
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
