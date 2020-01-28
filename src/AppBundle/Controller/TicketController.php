@@ -5,6 +5,7 @@ use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\AdminAddMessageToTicket;
+use Domain\UseCase\AdminCloseTicket;
 use Domain\UseCase\AssignTicket;
 use Domain\UseCase\CloseTicket;
 use Domain\UseCase\OpenTicket;
@@ -128,6 +129,25 @@ class TicketController extends Controller
         $ticket = $useCase->execute($id,$loggedUser, $data);
 
         if (!$ticket instanceof Ticket){
+            $response = new JsonResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        return new JsonResponse($ticket->serialize());
+    }
+
+    /**
+     * @Route("/admin/ticket/close/{id}", methods={"GET"}, name="admin_close_ticket")
+     */
+    public function adminCloseTicketAction(Request $request, int $id)
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $useCase = new AdminCloseTicket($this->get('domain.ticket.repository'));
+        $ticket = $useCase->execute($id, $loggedUser);
+
+        if (!$ticket){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
