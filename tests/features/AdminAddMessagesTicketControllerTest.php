@@ -24,17 +24,6 @@ class AdminAddMessagesTicketControllerTest extends BaseWebTestCase
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCantAddMessageToTicketFromAnotherUserPost()
-    {
-        $this->login();
-
-        $data = ["messaggio" =>"secondo messaggio"];
-
-        $this->client->request('POST', 'admin/ticket/3', $data);
-
-        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
-    }
-
     public function testAdminCanAddMessageToTicketPost()
     {
         $this->login();

@@ -17,20 +17,9 @@ class AddMessagesTicketControllerTest extends BaseWebTestCase
     {
         $this->login("user");
 
-        $data = ["messaggio" =>"secondo messaggio"];
+        $data = ["messaggio" => "secondo messaggio"];
 
         $this->client->request('POST', '/ticket/100', $data);
-
-        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
-    }
-
-    public function testUserCantAddMessageToTicketFromAnotherUserPost()
-    {
-        $this->login("user");
-
-        $data = ["messaggio" =>"secondo messaggio"];
-
-        $this->client->request('POST', '/ticket/3', $data);
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }

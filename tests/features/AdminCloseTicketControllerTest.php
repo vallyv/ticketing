@@ -24,15 +24,6 @@ class AdminCloseTicketControllerTest extends BaseWebTestCase
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testUserCantAddMessageToTicketFromAnotherUserPost()
-    {
-        $this->login();
-
-        $this->client->request('GET', 'admin/ticket/close/3');
-
-        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
-    }
-
     public function testAdminCanAddMessageToTicketPost()
     {
         $this->login();

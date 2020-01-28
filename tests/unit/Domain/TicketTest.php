@@ -7,6 +7,29 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TicketTest extends WebTestCase
 {
+
+    /** @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Messaggio inesistente
+     */
+    public function testUserCanTCreateTicketWithoutMessage()
+    {
+        $expected = [
+            "user" => "utente",
+            "message" => ["ciao"],
+            "status" => "open",
+            "assignedTo" => ""
+        ];
+
+        $user = $this->prophesize(User::class);
+        $user->isAdmin()->willReturn(false);
+        $user->getUsername()->willReturn('utente');
+
+        $dto = TicketDto::fromArray([]);
+
+        $ticket = Ticket::OpenTicket($user->reveal(), $dto);
+
+    }
+
     public function testUserCanCreateTicket()
     {
         $expected = [

@@ -20,6 +20,9 @@ class TicketFixtures extends Fixture
         $user = User::create('user', 'user', 'email');
         $manager->persist($user);
 
+        $user2 = User::create('user2', 'user', 'email');
+        $manager->persist($user2);
+
         $ticketDto = TicketDto::fromArray([
            "messaggio" => "primo messaggio"
         ]);
@@ -30,6 +33,10 @@ class TicketFixtures extends Fixture
 
         $ticket = Ticket::OpenTicket($user, $ticketDto);
         $ticket->assign($admin);
+
+        $manager->persist($ticket);
+
+        $ticket = Ticket::OpenTicket($user2, $ticketDto);
 
         $manager->persist($ticket);
 
