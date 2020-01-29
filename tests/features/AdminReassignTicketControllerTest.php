@@ -51,7 +51,7 @@ class AdminReassignTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"assigned","assignedTo":"admin2"}', $response);
+        $this->assertEquals('{"user":"user","status":"assigned","assignedTo":"admin2","messages":[{"text":"primo messaggio","author":"user"}]}', $response);
     }
 
     private function login()

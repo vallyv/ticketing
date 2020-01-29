@@ -18,13 +18,13 @@ class Ticket
 
     private $assigned;
 
-    private $messages;
-
     private $status;
+
+    private $messages;
 
     private $created_at;
 
-    private$updated_at;
+    private $updated_at;
 
     public static function OpenTicket(User $user, TicketDto $data): self
     {
@@ -32,16 +32,12 @@ class Ticket
         $ticket = new self();
         $ticket->user = $user;
         $ticket->status = self::STATUS_OPEN;
-        $ticket->messages[]  = $data->getMessage();
         $ticket->created_at = $now;
         $ticket->updated_at = $now;
 
-        return $ticket;
-    }
+        $ticket->AddMessage($data);
 
-    public function addMessage(string $message)
-    {
-        $this->messages[] = $message;
+        return $ticket;
     }
 
     public function setUpdateTime(\DateTime $date)
@@ -77,11 +73,22 @@ class Ticket
         return $this->assigned === $user;
     }
 
+    public function AddMessage(TicketDto $data)
+    {
+        // WIP -> no, passare utente loggato
+        $message = Message::create($this->user, $data->getMessage());
+        $message->joinTicket($this);
+        $this->messages[] = $message;
+    }
+
+    public function getMessages()
+    {
+        return $this->messages;
+    }
     public function serialize()
     {
         return [
             "user" => $this->user->getUsername(),
-            "message" => $this->messages,
             "status" => $this->status,
             "assignedTo" => $this->assigned ? $this->assigned->getUsername() : ''
         ];

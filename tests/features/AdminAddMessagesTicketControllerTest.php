@@ -34,7 +34,7 @@ class AdminAddMessagesTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio","secondo messaggio"],"status":"assigned","assignedTo":"admin"}', $response);
+        $this->assertEquals('{"user":"user","status":"assigned","assignedTo":"admin","messages":[{"text":"primo messaggio","author":"user"},{"text":"secondo messaggio","author":"user"}]}', $response);
     }
 
     public function testUserCanAddMessageToAssignedTicketPost()
@@ -47,7 +47,7 @@ class AdminAddMessagesTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio","secondo messaggio"],"status":"assigned","assignedTo":"admin"}', $response);
+        $this->assertEquals('{"user":"user","status":"assigned","assignedTo":"admin","messages":[{"text":"primo messaggio","author":"user"},{"text":"secondo messaggio","author":"user"}]}', $response);
     }
 
     private function login()

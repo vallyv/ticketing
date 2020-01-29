@@ -32,7 +32,7 @@ class AdminCloseTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close","assignedTo":""}', $response);
+        $this->assertEquals('{"user":"user","status":"close","assignedTo":"","messages":[{"text":"primo messaggio","author":"user"}]}', $response);
     }
 
     public function testUserCanAddMessageToAssignedTicketPost()
@@ -43,7 +43,7 @@ class AdminCloseTicketControllerTest extends BaseWebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('{"user":"user","message":["primo messaggio"],"status":"close","assignedTo":"admin"}', $response);
+        $this->assertEquals('{"user":"user","status":"close","assignedTo":"admin","messages":[{"text":"primo messaggio","author":"user"}]}', $response);
     }
 
     private function login()

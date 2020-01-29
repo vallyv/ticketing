@@ -22,7 +22,7 @@ class AddMessageToTicket
             return;
         }
 
-        $ticket->addMessage($data->getMessage());
+        $ticket->addMessage($data);
 
         $this->repository->save($ticket);
 

@@ -2,6 +2,7 @@
 
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
+use Domain\ReadModel\TicketReadModel;
 use Domain\Repository\TicketRepository;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\AdminAddMessageToTicket;
@@ -16,9 +17,12 @@ class AdminAddMessageToTicketTest extends WebTestCase
     {
         $expected = [
             "user" => "user",
-            "message" => ["primo messaggio","secondo messaggio" ],
             "status" => "assigned",
-            'assignedTo' => 'admin'
+            'assignedTo' => 'admin',
+            "messages" => [
+                ["text" => "primo messaggio", "author" => "user"],
+                ["text" => "secondo messaggio", "author" => "user"],
+            ],
         ];
 
         $user = $this->prophesize(User::class);
@@ -39,8 +43,9 @@ class AdminAddMessageToTicketTest extends WebTestCase
         $useCase = new AdminAddMessageToTicket($repo->reveal());
 
         $ticket = $useCase->execute(1, $admin->reveal(), $dto);
+        $readModel = TicketReadModel::create($ticket);
 
         $this->assertInstanceOf(Ticket::class, $ticket);
-        $this->assertEquals($expected, $ticket->serialize());
+        $this->assertEquals($expected, $readModel->serialize());
     }
 }

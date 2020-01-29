@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
+use Domain\ReadModel\TicketReadModel;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\AdminAddMessageToTicket;
 use Domain\UseCase\AdminCloseTicket;
@@ -34,7 +35,9 @@ class TicketController extends Controller
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        $rm = TicketReadModel::create($ticket);
+
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -43,16 +46,14 @@ class TicketController extends Controller
     public function openNewAction(Request $request)
     {
         $loggedUser = $this->getLoggedUser();
-
         $ticketRepo = $this->get('domain.ticket.repository');
-
         $data = TicketDto::fromArray($request->request->all());
 
         $usecase = new OpenTicket($ticketRepo);
-
         $ticket = $usecase->execute($loggedUser, $data);
+        $rm = TicketReadModel::create($ticket);
 
-        return new JsonResponse($ticket->serialize());
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -70,8 +71,9 @@ class TicketController extends Controller
             $response->setStatusCode(404);
             return $response;
         }
+        $rm = TicketReadModel::create($ticket);
 
-        return new JsonResponse($ticket->serialize());
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -87,13 +89,14 @@ class TicketController extends Controller
 
         try {
             $ticket = $useCase->execute($id, $loggedUser);
+            $rm = TicketReadModel::create($ticket);
         } catch (\Exception $e){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -114,7 +117,9 @@ class TicketController extends Controller
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        $rm = TicketReadModel::create($ticket);
+
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -135,7 +140,9 @@ class TicketController extends Controller
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        $rm = TicketReadModel::create($ticket);
+
+        return new JsonResponse($rm->serialize());
     }
 
     /**
@@ -154,7 +161,9 @@ class TicketController extends Controller
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        $rm = TicketReadModel::create($ticket);
+
+        return new JsonResponse($rm->serialize());
     }
 
     private function getLoggedUser(): User
@@ -190,13 +199,15 @@ class TicketController extends Controller
 
         try {
             $ticket = $useCase->execute($id, $loggedUser, $user);
+            $rm = TicketReadModel::create($ticket);
+
         } catch (\Exception $e){
             $response = new JsonResponse();
             $response->setStatusCode(404);
             return $response;
         }
 
-        return new JsonResponse($ticket->serialize());
+        return new JsonResponse($rm->serialize());
     }
 
 

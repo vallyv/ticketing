@@ -2,6 +2,7 @@
 
 use Domain\DTO\TicketDto;
 use Domain\Model\Ticket;
+use Domain\ReadModel\TicketReadModel;
 use Domain\Repository\TicketRepository;
 use Domain\UseCase\AdminCloseTicket;
 use Domain\UseCase\CloseTicket;
@@ -16,9 +17,11 @@ class AdminCloseTicketTest extends WebTestCase
     {
         $expected = [
             "user" => "utente",
-            "message" => ["primo messaggio"],
             "status" => "close",
-            'assignedTo' => ''
+            'assignedTo' => '',
+            "messages" => [
+                ["text" => "primo messaggio", "author" => "utente"],
+            ],
         ];
 
         $user = $this->prophesize(User::class);
@@ -35,8 +38,9 @@ class AdminCloseTicketTest extends WebTestCase
         $useCase = new AdminCloseTicket($repo->reveal());
 
         $ticket = $useCase->execute(1, $user->reveal());
+        $readModel = TicketReadModel::create($ticket);
 
         $this->assertInstanceOf(Ticket::class, $ticket);
-        $this->assertEquals($expected, $ticket->serialize());
+        $this->assertEquals($expected, $readModel->serialize());
     }
 }

@@ -1,0 +1,26 @@
+Domain\Model\Message:
+  repositoryClass: Domain\Repository\MessageRepository
+  type: entity
+  table: message
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    text:
+      type: text
+    created_at:
+      type: datetime
+
+  manyToOne:
+    author:
+      targetEntity: Domain\User\Model\User
+      joinColumn:
+        name: author_id
+        referencedName: id
+    ticket:
+      targetEntity: Domain\Model\Ticket
+      inversedBy: messages
+      joinColumn:
+        name: ticket_id
+        referencedColumnName: id

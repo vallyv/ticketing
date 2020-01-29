@@ -34,7 +34,6 @@ class TicketTest extends WebTestCase
     {
         $expected = [
             "user" => "utente",
-            "message" => ["ciao"],
             "status" => "open",
             "assignedTo" => ""
         ];

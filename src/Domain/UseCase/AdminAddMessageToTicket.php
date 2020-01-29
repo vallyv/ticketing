@@ -26,7 +26,7 @@ class AdminAddMessageToTicket
             return;
         }
 
-        $ticket->addMessage($data->getMessage());
+        $ticket->addMessage($data);
         $ticket->assign($admin);
 
         $this->repository->save($ticket);
