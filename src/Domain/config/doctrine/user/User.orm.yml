@@ -21,3 +21,5 @@ Domain\User\Model\User:
     isActive:
       type: integer
       length: 1
+    isAdmin:
+      type: boolean

@@ -8,18 +8,22 @@ use Domain\User\Model\User;
 
 class OpenTicket
 {
-    private $repository;
+    private $ticketRepo;
+    private $notificationSender;
 
-    public function __construct(TicketRepository $repo)
+    public function __construct(TicketRepository $ticketRepo, SendAdminNotifications $notification)
     {
-        $this->repository = $repo;
+        $this->ticketRepo = $ticketRepo;
+        $this->notificationSender = $notification;
     }
 
     public function execute(User $user, TicketDto $data)
     {
         $ticket = Ticket::OpenTicket($user, $data);
 
-        $this->repository->save($ticket);
+        $this->ticketRepo->save($ticket);
+
+        $this->notificationSender->execute('Ticket open');
 
         return $ticket;
 

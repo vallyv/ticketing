@@ -21,6 +21,8 @@ class User implements UserInterface, \Serializable
 
     private $isActive;
 
+    private $isAdmin;
+
     public static function create($username, $password, $email, $role = null): User
     {
         $user = new self();
@@ -28,9 +30,11 @@ class User implements UserInterface, \Serializable
         $user->password = $password;
         $user->email = $email;
         $user->roles[] = self::ROLE_USER;
+        $user->isAdmin = false;
 
         if ($role == 'admin'){
             $user->roles[] = self::ROLE_ADMIN;
+            $user->isAdmin = true;
         }
 
         return $user;
@@ -63,8 +67,20 @@ class User implements UserInterface, \Serializable
 
     public function isAdmin(): bool
     {
-        return in_array(self::ROLE_ADMIN, $this->getRoles());
+        return $this->isAdmin;
     }
+
+    public function hasSMSNotification(): bool
+    {
+        return true;
+    }
+
+    public function hasPushNotification(): bool
+    {
+        return true;
+    }
+
+
     public function eraseCredentials()
     {
     }

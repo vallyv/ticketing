@@ -15,4 +15,12 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function loadAdmins()
+    {
+        return $this->createQueryBuilder('u')
+        ->where('u.isAdmin = 1')
+        ->getQuery()
+        ->getResult();
+    }
 }

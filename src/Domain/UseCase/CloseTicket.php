@@ -7,10 +7,12 @@ use Domain\User\Model\User;
 class CloseTicket
 {
     private $repository;
+    private $adminNotifications;
 
-    public function __construct(TicketRepository $repo)
+    public function __construct(TicketRepository $repo, SendAdminNotifications $adminNotifications)
     {
         $this->repository = $repo;
+        $this->adminNotifications = $adminNotifications;
     }
 
     public function execute(int $id, User $user)
@@ -19,6 +21,10 @@ class CloseTicket
 
         if(is_null($ticket)){
             return;
+        }
+
+        if (!$ticket->isAssigned()){
+            $this->adminNotifications->execute('Ticket chiuso '.$id);
         }
 
         $ticket->close();
