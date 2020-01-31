@@ -47,9 +47,10 @@ class TicketController extends Controller
     {
         $loggedUser = $this->getLoggedUser();
         $ticketRepo = $this->get('domain.ticket.repository');
+        $sender = $this->get('domain.adminNotifications.sender');
         $data = TicketDto::fromArray($request->request->all());
 
-        $usecase = new OpenTicket($ticketRepo);
+        $usecase = new OpenTicket($ticketRepo, $sender);
         $ticket = $usecase->execute($loggedUser, $data);
         $rm = TicketReadModel::create($ticket);
 

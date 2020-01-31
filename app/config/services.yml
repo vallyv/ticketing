@@ -17,6 +17,10 @@ services:
             - getRepository
         arguments: [Domain\Model\Ticket]
 
+    domain.adminNotifications.sender:
+        class: Domain\UseCase\SendAdminNotifications
+        arguments: ["@domain.user.repository"]
+
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures/*'
         tags: ['doctrine.fixture.orm']
