@@ -24,7 +24,7 @@ class CloseTicket
         }
 
         if (!$ticket->isAssigned()){
-            $this->adminNotifications->execute('Ticket chiuso');
+            $this->adminNotifications->execute('Ticket chiuso '.$id);
         }
 
         $ticket->close();

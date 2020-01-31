@@ -8,10 +8,12 @@ use Domain\User\Model\User;
 class AddMessageToTicket
 {
     private $repository;
+    private $adminNotifications;
 
-    public function __construct(TicketRepository $repo)
+    public function __construct(TicketRepository $repo, SendAdminNotifications $adminNotifications)
     {
         $this->repository = $repo;
+        $this->adminNotifications = $adminNotifications;
     }
 
     public function execute(int $id, User $user, TicketDto $data)
@@ -21,6 +23,10 @@ class AddMessageToTicket
         if(is_null($ticket)){
             return;
         }
+        if (!$ticket->isAssigned()){
+            $this->adminNotifications->execute('Nuovo messaggio nel ticket'.$id);
+        }
+
 
         $ticket->addMessage($data);
 

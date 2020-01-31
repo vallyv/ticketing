@@ -109,8 +109,9 @@ class TicketController extends Controller
         $loggedUser = $this->getLoggedUser();
 
         $data = TicketDto::fromArray($request->request->all());
+        $sender = $this->get('domain.adminNotifications.sender');
 
-        $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'));
+        $useCase = new AddMessageToTicket($this->get('domain.ticket.repository'), $sender);
         $ticket = $useCase->execute($id,$loggedUser, $data);
 
         if (!$ticket instanceof Ticket){
