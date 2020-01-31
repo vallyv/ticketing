@@ -7,7 +7,7 @@ use Domain\Model\PushNotification;
 use Domain\Model\SmsNotification;
 use Domain\User\Model\User;
 
-class SendUserNotifications
+class SendSingleUserNotifications
 {
 
     public function execute(User $user, string $text)

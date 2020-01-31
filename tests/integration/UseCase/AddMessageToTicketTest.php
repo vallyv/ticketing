@@ -7,6 +7,7 @@ use Domain\Repository\TicketRepository;
 use Domain\UseCase\AddMessageToTicket;
 use Domain\UseCase\OpenTicket;
 use Domain\UseCase\SendAdminNotifications;
+use Domain\UseCase\SendSingleUserNotifications;
 use Domain\User\Model\User;
 use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -41,10 +42,11 @@ class AddMessageToTicketTest extends WebTestCase
         $repo = $this->prophesize(TicketRepository::class);
         $repo->findNotCloseByUserAndId($user->reveal(), 1)->willReturn($ticket);
         $repo->save(Argument::any())->shouldBeCalled();
-        $notificationSender = $this->prophesize(SendAdminNotifications::class);
-        $notificationSender->execute(Argument::any())->shouldBeCalled();
+        $adminNotificationSender = $this->prophesize(SendAdminNotifications::class);
+        $userNotificationSender = $this->prophesize(SendSingleUserNotifications::class);
+        $adminNotificationSender->execute(Argument::any())->shouldBeCalled();
 
-        $useCase = new AddMessageToTicket($repo->reveal(), $notificationSender->reveal());
+        $useCase = new AddMessageToTicket($repo->reveal(), $adminNotificationSender->reveal(), $userNotificationSender->reveal());
         $ticket = $useCase->execute(1, $user->reveal(), $dto);
         $readModel = TicketReadModel::create($ticket);
 

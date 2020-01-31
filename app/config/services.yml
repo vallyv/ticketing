@@ -22,7 +22,7 @@ services:
         arguments: ["@domain.user.repository"]
 
     domain.userNotifications.sender:
-        class: Domain\UseCase\SendNotifications
+        class: Domain\UseCase\SendSingleUserNotifications
 
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures/*'
