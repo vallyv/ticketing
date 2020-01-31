@@ -10,10 +10,11 @@ class AddMessageToTicket
     private $repository;
     private $adminNotifications;
 
-    public function __construct(TicketRepository $repo, SendAdminNotifications $adminNotifications)
+    public function __construct(TicketRepository $repo, SendAdminNotifications $adminNotifications, SendSingleUserNotifications $notifications)
     {
         $this->repository = $repo;
         $this->adminNotifications = $adminNotifications;
+        $this->notifications = $notifications;
     }
 
     public function execute(int $id, User $user, TicketDto $data)
@@ -23,8 +24,15 @@ class AddMessageToTicket
         if(is_null($ticket)){
             return;
         }
+
+        $message = 'Nuovo messaggio nel ticket' . $id;
+
         if (!$ticket->isAssigned()){
-            $this->adminNotifications->execute('Nuovo messaggio nel ticket'.$id);
+            $this->adminNotifications->execute($message);
+        }
+
+        if ($ticket->getAssigned()){
+            $this->notifications->execute($ticket->getAssigned(), $message);
         }
 
 

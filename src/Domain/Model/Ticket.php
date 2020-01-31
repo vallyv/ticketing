@@ -85,6 +85,12 @@ class Ticket
     {
         return $this->messages;
     }
+
+     public function getAssigned()
+    {
+        return $this->assigned;
+    }
+
     public function serialize()
     {
         return [
