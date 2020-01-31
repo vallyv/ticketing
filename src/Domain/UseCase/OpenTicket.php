@@ -23,7 +23,7 @@ class OpenTicket
 
         $this->ticketRepo->save($ticket);
 
-        //$this->notificationSender->execute('Ticket open');
+        $this->notificationSender->execute('Ticket open');
 
         return $ticket;
 

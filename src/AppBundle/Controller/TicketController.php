@@ -63,8 +63,9 @@ class TicketController extends Controller
     public function closeTicketAction(Request $request, int $id)
     {
         $loggedUser = $this->getLoggedUser();
+        $sender = $this->get('domain.adminNotifications.sender');
 
-        $useCase = new CloseTicket($this->get('domain.ticket.repository'));
+        $useCase = new CloseTicket($this->get('domain.ticket.repository'), $sender);
         $ticket = $useCase->execute($id, $loggedUser);
 
         if (!$ticket){

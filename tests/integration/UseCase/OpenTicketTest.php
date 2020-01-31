@@ -38,7 +38,7 @@ class OpenTicketTest extends WebTestCase
         $notificationSender->execute(Argument::any())->shouldBeCalled();
 
         $dto = TicketDto::fromArray(["messaggio" => "ciao"]);
-        $useCase = new OpenTicket($ticketRepo->reveal(), $userRepo->reveal(), $notificationSender->reveal());
+        $useCase = new OpenTicket($ticketRepo->reveal(), $notificationSender->reveal());
         $ticket = $useCase->execute($user->reveal(), $dto);
         $readModel = TicketReadModel::create($ticket);
 

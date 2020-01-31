@@ -21,6 +21,9 @@ services:
         class: Domain\UseCase\SendAdminNotifications
         arguments: ["@domain.user.repository"]
 
+    domain.userNotifications.sender:
+        class: Domain\UseCase\SendNotifications
+
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures/*'
         tags: ['doctrine.fixture.orm']
