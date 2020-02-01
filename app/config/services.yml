@@ -7,19 +7,38 @@ services:
     domain.user.repository:
         class: Domain\User\Repository\UserRepository
         factory:
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
             - getRepository
         arguments: [Domain\User\Model\User]
     domain.ticket.repository:
         class: Domain\User\Repository\TicketRepository
         factory:
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
             - getRepository
         arguments: [Domain\Model\Ticket]
 
+
+    domain.notification.SMSNotifications:
+        class: Domain\Model\SMSNotification
+        tags: ['notifications']
+
+    domain.notification.pushNotifications:
+        class: Domain\Model\PushNotification
+        tags: [notifications]
+
+    domain.notification.emailNotifications:
+        class: Domain\Model\EmailNotification
+        tags: [notifications]
+
+    domain.notifications.sender:
+        class: Domain\Model\NotificationContext
+        arguments:  [!tagged notifications]
+
     domain.adminNotifications.sender:
         class: Domain\UseCase\SendAdminNotifications
-        arguments: ["@domain.user.repository"]
+        arguments:
+            - '@domain.user.repository'
+            - '@domain.notifications.sender'
 
     domain.userNotifications.sender:
         class: Domain\UseCase\SendNotifications

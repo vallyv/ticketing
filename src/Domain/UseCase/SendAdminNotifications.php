@@ -2,50 +2,26 @@
 
 namespace Domain\UseCase;
 
-use Domain\Model\EmailNotification;
-use Domain\Model\PushNotification;
-use Domain\Model\SmsNotification;
+use Domain\Model\NotificationContext;
 use Domain\User\Repository\UserRepository;
 
 class SendAdminNotifications
 {
     private $admins;
+    private $notificationContext;
 
-    public function __construct(UserRepository $repo)
+    public function __construct(UserRepository $repo, NotificationContext $notificationContext)
     {
         $this->admins = $repo->loadAdmins();
+        $this->notificationContext = $notificationContext;
     }
 
     public function execute(string $text)
     {
         foreach ($this->admins as $admin) {
-            $this->sendEmail($admin, $text);
-            $this->sendPushNotification($admin, $text);
-            $this->sendSms($admin, $text);
+            $this->notificationContext->send($admin, $text);
         }
 
         return true;
-    }
-
-    private function sendEmail($user, $text)
-    {
-        $notification = EmailNotification::create($user, $text);
-        $notification->send();
-    }
-
-    private function sendPushNotification($user, $text)
-    {
-        if($user->hasPushNotification()){
-            $notification = PushNotification::create($user, $text);
-            $notification->send();
-        }
-    }
-
-    private function sendSms($user, $text)
-    {
-        if($user->hasSMSNotification()) {
-            $notification = SmsNotification::create($user, $text);
-            $notification->send();
-        }
     }
 }

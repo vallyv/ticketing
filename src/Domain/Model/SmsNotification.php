@@ -9,7 +9,7 @@ class SmsNotification implements NotificationInterface
     private $created_at;
     private $receiver;
 
-    public static function create(User $receiver, string $text)
+    public static function create(User $receiver, string $text): NotificationInterface
     {
         $notification = new self();
         $notification->text = $text;
@@ -17,6 +17,11 @@ class SmsNotification implements NotificationInterface
         $notification->created_at = new \DateTime('now');
 
         return $notification;
+    }
+
+    public function supports(): bool
+    {
+        return true;
     }
 
     public function send()
